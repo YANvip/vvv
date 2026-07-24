@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>网店售后工作台</title>
+  <style>
+    :root{--nav:#172033;--blue:#2563eb;--blue2:#dbeafe;--bg:#f4f6f9;--paper:#fff;--line:#dfe3ea;--text:#172033;--muted:#667085;--green:#15803d;--amber:#a16207;--red:#c2413b}
+    *{box-sizing:border-box}body{margin:0;font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif;background:var(--bg);color:var(--text);font-size:14px}
+    button,input,select,textarea{font:inherit}button{cursor:pointer}.hidden{display:none!important}
+    .login{min-height:100vh;display:grid;place-items:center;background:#edf1f7}.login-box{width:min(390px,calc(100% - 32px));background:#fff;border:1px solid var(--line);padding:34px;border-radius:8px;box-shadow:0 18px 40px #17203318}
+    .login-mark{width:42px;height:42px;background:var(--blue);color:#fff;display:grid;place-items:center;border-radius:8px;font-weight:800;font-size:20px}.login h1{font-size:24px;margin:18px 0 6px}.login p{color:var(--muted);margin:0 0 24px}
+    label{display:block;color:#475467;font-size:13px;margin:12px 0 6px}input,select,textarea{width:100%;border:1px solid #ccd2dc;border-radius:6px;padding:10px 11px;background:#fff;color:var(--text);outline:none}input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px #2563eb18}textarea{resize:vertical;min-height:92px}
+    .btn{border:0;border-radius:6px;background:var(--blue);color:#fff;padding:9px 14px;font-weight:600}.btn:hover{filter:brightness(.96)}.btn.ghost{background:#fff;color:#344054;border:1px solid #cfd5df}.btn.green{background:var(--green)}.btn.red{background:var(--red)}.btn.small{padding:6px 9px;font-size:12px}.btn:disabled{opacity:.5;cursor:not-allowed}
+    .login .btn{width:100%;margin-top:20px;padding:11px}.error{color:var(--red);min-height:20px;margin-top:10px}
+    .app{min-height:100vh}.topbar{height:58px;background:var(--nav);color:#fff;display:flex;align-items:center;padding:0 18px;gap:24px;position:sticky;top:0;z-index:5}.brand{font-weight:800;font-size:17px;white-space:nowrap}.nav{display:flex;align-self:stretch}.nav button{border:0;background:transparent;color:#c7cfdd;padding:0 16px;border-bottom:3px solid transparent}.nav button.active{color:#fff;border-bottom-color:#60a5fa}.account{margin-left:auto;display:flex;gap:10px;align-items:center;color:#dbe2ee}.account button{background:transparent;border:0;color:#dbe2ee}
+    main{max-width:1560px;margin:auto;padding:18px}.page-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.page-head h1{font-size:20px;margin:0}.page-head p{margin:4px 0 0;color:var(--muted)}
+    .stats{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--line);background:#fff;margin-bottom:16px}.stat{padding:15px 18px;border-right:1px solid var(--line)}.stat:last-child{border:0}.stat b{display:block;font-size:24px;margin-top:5px}.stat span{color:var(--muted);font-size:12px}
+    .workspace{display:grid;grid-template-columns:minmax(330px,430px) minmax(0,1fr);gap:14px}.panel{background:var(--paper);border:1px solid var(--line);border-radius:8px}.panel-head{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}.panel-head h2{font-size:15px;margin:0}.panel-body{padding:16px}
+    .quick{min-height:124px;font-size:16px;line-height:1.7}.actions{display:flex;gap:8px;margin-top:12px}.parse{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}.parse-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.parse .wide{grid-column:1/-1}.warning{background:#fff7ed;color:#9a3412;border:1px solid #fed7aa;padding:9px;border-radius:6px;margin-top:10px}.ok{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;padding:9px;border-radius:6px;margin-top:10px}
+    .filters{display:grid;grid-template-columns:2fr repeat(3,1fr) auto;gap:8px;padding:12px 14px;border-bottom:1px solid var(--line)}.table-wrap{overflow:auto;max-height:calc(100vh - 280px)}table{width:100%;border-collapse:collapse;font-size:13px}th{position:sticky;top:0;background:#f8fafc;z-index:1;color:#475467;text-align:left;font-weight:600}th,td{padding:10px;border-bottom:1px solid #edf0f4;white-space:nowrap}tbody tr:hover{background:#f8fbff}.link{color:#1d4ed8;cursor:pointer;font-weight:600}.badge{display:inline-flex;padding:3px 8px;border-radius:12px;background:#eef2f6;color:#475467}.badge.pending{background:#fef3c7;color:#92400e}.badge.need_review{background:#fee2e2;color:#991b1b}.badge.done{background:#dcfce7;color:#166534}.empty{text-align:center;color:var(--muted);padding:60px!important}
+    .scan{display:flex;gap:6px;min-width:250px}.scan input{padding:7px}.scan .btn{flex:none}.toolbar{display:flex;gap:8px}.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.form-grid .wide{grid-column:1/-1}
+    .settings{display:grid;grid-template-columns:1fr 1fr;gap:14px}.settings table{font-size:13px}.settings .panel{min-height:400px}.inline-form{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}.inline-form .wide{grid-column:1/-1}
+    dialog{border:0;border-radius:8px;padding:0;width:min(720px,calc(100% - 24px));box-shadow:0 24px 70px #11182755}dialog::backdrop{background:#11182780}.modal-head{padding:15px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}.modal-head h2{margin:0;font-size:17px}.close{border:0;background:transparent;font-size:22px}.modal-body{padding:18px}.modal-foot{padding:12px 18px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px}.logs{border-top:1px solid var(--line);margin-top:18px;padding-top:12px}.log{padding:8px 0;border-bottom:1px solid #eee;color:#475467;font-size:12px}
+    .toast{position:fixed;right:18px;bottom:18px;background:#172033;color:#fff;padding:11px 15px;border-radius:6px;box-shadow:0 8px 24px #0003;z-index:20}
+    @media(max-width:1000px){.workspace,.settings{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.stat{border-bottom:1px solid var(--line)}.nav button{padding:0 9px}.table-wrap{max-height:none}}
+    @media(max-width:650px){.topbar{padding:0 10px;gap:8px}.brand{font-size:14px}.nav button{font-size:12px}.account span{display:none}main{padding:10px}.filters{grid-template-columns:1fr 1fr}.filters input{grid-column:1/-1}.stats{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}.form-grid .wide{grid-column:auto}}
+  </style>
+</head>
+<body>
+  <div id="login" class="login">
+    <form class="login-box" onsubmit="login(event)">
+      <div class="login-mark">售</div><h1>网店售后工作台</h1><p>补发、换货、退件统一协作处理</p>
+      <label>账号</label><input id="loginUser" value="admin" autocomplete="username">
+      <label>密码</label><input id="loginPassword" type="password" autocomplete="current-password">
+      <button class="btn" type="submit">登录</button><div id="loginError" class="error"></div>
+    </form>
+  </div>
+  <div id="app" class="app hidden">
+    <header class="topbar">
+      <div class="brand">网店售后工作台</div>
+      <nav class="nav">
+        <button data-page="work" onclick="showPage('work')">售后处理</button>
+        <button data-page="settings" class="admin-only" onclick="showPage('settings')">后台管理</button>
+      </nav>
+      <div class="account"><span id="who"></span><button title="修改密码" onclick="changePassword()">改密码</button><button title="退出登录" onclick="logout()">退出</button></div>
+    </header>
+    <main>
+      <section id="page-work">
+        <div class="page-head"><div><h1>售后处理</h1><p>客服建单，打单员填写快递单号，全程留痕。</p></div><div class="toolbar"><button class="btn ghost" onclick="location.href='/api/cases/export.csv'">导出 Excel</button></div></div>
+        <div class="stats">
+          <div class="stat"><span>全部记录</span><b id="sTotal">0</b></div><div class="stat"><span>今日新建</span><b id="sToday">0</b></div>
+          <div class="stat"><span>待确认</span><b id="sReview">0</b></div><div class="stat"><span>待处理</span><b id="sPending">0</b></div><div class="stat"><span>已完成</span><b id="sDone">0</b></div>
+        </div>
+        <div class="workspace">
+          <section id="entryPanel" class="panel">
+            <div class="panel-head"><h2>客服一句话建单</h2><span style="color:var(--muted);font-size:12px">支持订单号、型号、数量、颜色</span></div>
+            <div class="panel-body">
+              <textarea id="rawText" class="quick" placeholder="例如：260708-560380003972903 补发两个6600灰"></textarea>
+              <div class="actions"><button class="btn ghost" onclick="parseText()">识别</button><button class="btn" onclick="createCase()">确认建单</button></div>
+              <div id="parseBox" class="parse hidden">
+                <div class="parse-grid">
+                  <div><label>平台</label><select id="pPlatform"><option>拼多多</option><option>抖店</option><option>淘宝/天猫</option><option>未知平台</option></select></div>
+                  <div><label>售后类型</label><select id="pType"><option>补发</option><option>换货</option><option>退件</option></select></div>
+                  <div class="wide"><label>订单号</label><input id="pOrder"></div>
+                  <div><label>商品型号</label><input id="pModel"></div><div><label>商品名称</label><input id="pProduct"></div>
+                  <div><label>数量</label><input id="pQty" type="number" min="1"></div><div><label>颜色</label><input id="pColor" placeholder="配件可留空"></div>
+                  <div class="wide"><label>备注</label><input id="pRemark"></div>
+                </div><div id="parseMessage"></div>
+              </div>
+            </div>
+          </section>
+          <section class="panel">
+            <div class="panel-head"><h2>售后记录</h2><span id="countText"></span></div>
+            <div class="filters">
+              <input id="keyword" placeholder="搜索订单号、商品、售后单、快递单号">
+              <select id="fStatus"><option value="">全部状态</option><option value="need_review">待确认</option><option value="pending">待处理</option><option value="processing">处理中</option><option value="done">已完成</option><option value="cancelled">已取消</option></select>
+              <select id="fType"><option value="">全部类型</option><option>补发</option><option>换货</option><option>退件</option></select>
+              <select id="fPlatform"><option value="">全部平台</option><option>拼多多</option><option>抖店</option><option>淘宝/天猫</option><option>未知平台</option></select>
+              <button class="btn ghost" onclick="loadCases()">刷新</button>
+            </div>
+            <div class="table-wrap"><table><thead><tr><th>售后单</th><th>订单/平台</th><th>类型</th><th>商品</th><th>数量</th><th>状态</th><th>补发快递单号</th><th>创建人</th></tr></thead><tbody id="caseRows"></tbody></table></div>
+          </section>
+        </div>
+      </section>
+      <section id="page-settings" class="hidden">
+        <div class="page-head"><div><h1>后台管理</h1><p>维护登录人员、权限和一句话识别规则。</p></div></div>
+        <div class="settings">
+          <section class="panel"><div class="panel-head"><h2>人员账号</h2></div><div class="panel-body">
+            <form class="inline-form" onsubmit="addUser(event)">
+              <input id="uName" placeholder="登录账号" required><input id="uDisplay" placeholder="姓名" required>
+              <input id="uPassword" type="password" placeholder="初始密码（至少6位）" required>
+              <select id="uRole"><option value="customer_service">客服</option><option value="printer">打单员</option><option value="admin">管理员</option></select>
+              <button class="btn wide" type="submit">创建人员账号</button>
+            </form>
+            <table><thead><tr><th>账号</th><th>姓名</th><th>角色</th><th>状态</th><th>操作</th></tr></thead><tbody id="userRows"></tbody></table>
+          </div></section>
+          <section class="panel"><div class="panel-head"><h2>商品识别规则</h2></div><div class="panel-body">
+            <form class="inline-form" onsubmit="addCatalog(event)">
+              <input id="cModel" placeholder="型号，如 6600" required><input id="cType" placeholder="商品类型，如 塑料凳">
+              <input id="cAliases" class="wide" placeholder="识别别名，用英文逗号分隔">
+              <input id="cColors" class="wide" placeholder="可选颜色，用英文逗号分隔">
+              <label><input id="cRequired" type="checkbox" style="width:auto"> 必须识别颜色</label><button class="btn" type="submit">新增规则</button>
+            </form>
+            <table><thead><tr><th>型号</th><th>类型</th><th>颜色规则</th><th>启用</th></tr></thead><tbody id="catalogRows"></tbody></table>
+          </div></section>
+        </div>
+      </section>
+    </main>
+  </div>
+  <dialog id="caseDialog">
+    <div class="modal-head"><h2>售后单详情</h2><button class="close" onclick="caseDialog.close()">×</button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div><label>售后类型</label><select id="dType"><option>补发</option><option>换货</option><option>退件</option></select></div>
+        <div><label>状态</label><select id="dStatus"><option value="need_review">待确认</option><option value="pending">待处理</option><option value="processing">处理中</option><option value="done">已完成</option><option value="cancelled">已取消</option></select></div>
+        <div><label>平台</label><select id="dPlatform"><option>拼多多</option><option>抖店</option><option>淘宝/天猫</option><option>未知平台</option></select></div>
+        <div><label>订单号</label><input id="dOrder"></div><div><label>商品型号</label><input id="dModel"></div><div><label>商品名称</label><input id="dProduct"></div>
+        <div><label>数量</label><input id="dQty" type="number" min="1"></div><div><label>颜色</label><input id="dColor"></div>
+        <div class="wide"><label>原因</label><textarea id="dReason"></textarea></div><div class="wide"><label>备注</label><textarea id="dRemark"></textarea></div>
+      </div><div id="logRows" class="logs"></div>
+    </div>
+    <div class="modal-foot"><button class="btn ghost" onclick="caseDialog.close()">取消</button><button class="btn" onclick="saveDetail()">保存修改</button></div>
+  </dialog>
+  <div id="toast" class="toast hidden"></div>
+  <script>
+    const API='/api'; let me=null, parsed=null, currentId=null;
+    const roleText={admin:'管理员',customer_service:'客服',printer:'打单员'};
+    const statusText={need_review:'待确认',pending:'待处理',processing:'处理中',done:'已完成',cancelled:'已取消'};
+    const esc=(v)=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    async function request(url,opts={}){const res=await fetch(API+url,{headers:{'Content-Type':'application/json',...(opts.headers||{})},...opts});let data;try{data=await res.json()}catch{data={}}if(res.status===401){showLogin();throw Error(data.error||'请先登录')}if(!res.ok){const e=Error(data.error||'操作失败');e.data=data;throw e}return data}
+    function toast(text){const el=document.getElementById('toast');el.textContent=text;el.classList.remove('hidden');setTimeout(()=>el.classList.add('hidden'),2200)}
+    function showLogin(){document.getElementById('login').classList.remove('hidden');document.getElementById('app').classList.add('hidden')}
+    async function login(e){e.preventDefault();loginError.textContent='';try{me=await request('/auth/login',{method:'POST',body:JSON.stringify({username:loginUser.value,password:loginPassword.value})});startApp()}catch(err){loginError.textContent=err.message}}
+    async function logout(){try{await request('/auth/logout',{method:'POST'})}finally{location.reload()}}
+    async function changePassword(){const oldPassword=prompt('请输入原密码');if(oldPassword===null)return;const newPassword=prompt('请输入新密码（至少8位）');if(newPassword===null)return;try{await request('/auth/change-password',{method:'POST',body:JSON.stringify({oldPassword,newPassword})});toast('密码修改成功')}catch(err){toast(err.message)}}
+    async function boot(){try{me=await request('/auth/me');startApp()}catch{}}
+    function startApp(){document.getElementById('login').classList.add('hidden');document.getElementById('app').classList.remove('hidden');who.textContent=`${me.displayName} · ${roleText[me.role]}`;document.querySelectorAll('.admin-only').forEach(x=>x.classList.toggle('hidden',me.role!=='admin'));entryPanel.classList.toggle('hidden',me.role==='printer');showPage('work');loadAll()}
+    function showPage(name){document.querySelectorAll('[id^=page-]').forEach(x=>x.classList.add('hidden'));document.getElementById('page-'+name).classList.remove('hidden');document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===name));if(name==='settings')loadSettings()}
+    async function loadAll(){await Promise.all([loadDashboard(),loadCases()])}
+    async function loadDashboard(){const s=await request('/dashboard');sTotal.textContent=s.total;sToday.textContent=s.today;sReview.textContent=s.need_review;sPending.textContent=s.pending;sDone.textContent=s.done}
+    async function parseText(){if(!rawText.value.trim())return toast('请先输入客服原话');parsed=await request('/parse',{method:'POST',body:JSON.stringify({text:rawText.value})});showParsed(parsed)}
+    function showParsed(p){parseBox.classList.remove('hidden');pPlatform.value=p.platform;pType.value=p.type;pOrder.value=p.orderNo;pModel.value=p.model;pProduct.value=p.productName;pQty.value=p.quantity;pColor.value=p.color||'';parseMessage.className=p.warnings.length?'warning':'ok';parseMessage.textContent=p.warnings.length?p.warnings.join('；'):'识别完整，可以确认建单'}
+    async function createCase(){try{if(!parsed)await parseText();const overrides={platform:pPlatform.value,type:pType.value,orderNo:pOrder.value,model:pModel.value,productName:pProduct.value,quantity:Number(pQty.value),color:pColor.value,needReview:false,warnings:[]};await request('/cases/from-text',{method:'POST',body:JSON.stringify({text:rawText.value,overrides,remark:pRemark.value})});rawText.value='';parsed=null;parseBox.classList.add('hidden');toast('售后单已创建');loadAll()}catch(err){if(err.data?.duplicate&&confirm(err.message+'，仍要继续建单吗？')){await request('/cases/from-text',{method:'POST',body:JSON.stringify({text:rawText.value,allowDuplicate:true,overrides:{platform:pPlatform.value,type:pType.value,orderNo:pOrder.value,model:pModel.value,productName:pProduct.value,quantity:Number(pQty.value),color:pColor.value,needReview:false,warnings:[]}})});toast('重复订单已建单');loadAll()}else if(!err.data?.duplicate)toast(err.message)}}
+    async function loadCases(){const q=new URLSearchParams({keyword:keyword.value,status:fStatus.value,type:fType.value,platform:fPlatform.value});const rows=await request('/cases?'+q);countText.textContent=`${rows.length} 条`;caseRows.innerHTML=rows.length?rows.map(rowHtml).join(''):'<tr><td class="empty" colspan="8">没有符合条件的售后记录</td></tr>'}
+    function rowHtml(x){const tracking=esc(x.resend_tracking_no||'');const canTrack=['admin','printer'].includes(me.role);return `<tr><td><span class="link" onclick="openCase(${x.id})">${esc(x.case_no)}</span></td><td>${esc(x.order_no)}<br><small>${esc(x.platform)}</small></td><td>${esc(x.type)}</td><td>${esc(x.product_sku||x.product_name)} ${esc(x.color||'')}</td><td>${x.quantity||1}</td><td><span class="badge ${x.status}">${statusText[x.status]||esc(x.status)}</span></td><td>${canTrack?`<div class="scan"><input id="t${x.id}" value="${tracking}" placeholder="扫码枪扫描或输入"><button class="btn small green" onclick="saveTracking(${x.id})">保存</button></div>`:(tracking||'未填写')}</td><td>${esc(x.created_by_name||'-')}</td></tr>`}
+    async function saveTracking(id){try{await request(`/cases/${id}/tracking`,{method:'PATCH',body:JSON.stringify({trackingNo:document.getElementById('t'+id).value})});toast('快递单号已保存，状态已完成');loadAll()}catch(err){toast(err.message)}}
+    async function openCase(id){currentId=id;const data=await request('/cases/'+id),x=data.case;dType.value=x.type;dStatus.value=x.status;dPlatform.value=x.platform;dOrder.value=x.order_no||'';dModel.value=x.product_sku||'';dProduct.value=x.product_name||'';dQty.value=x.quantity||1;dColor.value=x.color||'';dReason.value=x.reason||'';dRemark.value=x.remark||'';logRows.innerHTML='<b>操作记录</b>'+data.logs.map(l=>`<div class="log">${new Date(l.created_at).toLocaleString()}　${esc(l.display_name||'系统')}　${esc(l.action)}　${esc(l.detail||'')}</div>`).join('');caseDialog.showModal()}
+    async function saveDetail(){try{await request('/cases/'+currentId,{method:'PATCH',body:JSON.stringify({type:dType.value,status:dStatus.value,platform:dPlatform.value,order_no:dOrder.value,product_sku:dModel.value,product_name:dProduct.value,quantity:Number(dQty.value),color:dColor.value,reason:dReason.value,remark:dRemark.value})});caseDialog.close();toast('修改已保存');loadAll()}catch(err){toast(err.message)}}
+    async function loadSettings(){const [users,catalog]=await Promise.all([request('/users'),request('/catalog')]);userRows.innerHTML=users.map(x=>`<tr><td>${esc(x.username)}</td><td><input id="un${x.id}" value="${esc(x.display_name)}"></td><td><select id="ur${x.id}"><option value="customer_service" ${x.role==='customer_service'?'selected':''}>客服</option><option value="printer" ${x.role==='printer'?'selected':''}>打单员</option><option value="admin" ${x.role==='admin'?'selected':''}>管理员</option></select></td><td><input id="ua${x.id}" type="checkbox" ${x.active?'checked':''}></td><td><button class="btn small ghost" onclick="saveUser(${x.id})">保存</button></td></tr>`).join('');catalogRows.innerHTML=catalog.map(x=>`<tr><td>${esc(x.model)}</td><td>${esc(x.product_type)}</td><td>${x.color_required?esc(x.colors):'无需颜色'}</td><td>${x.active?'是':'否'}</td></tr>`).join('')}
+    async function addUser(e){e.preventDefault();try{await request('/users',{method:'POST',body:JSON.stringify({username:uName.value,displayName:uDisplay.value,password:uPassword.value,role:uRole.value})});e.target.reset();toast('人员账号已创建');loadSettings()}catch(err){toast(err.message)}}
+    async function saveUser(id){try{await request('/users/'+id,{method:'PATCH',body:JSON.stringify({displayName:document.getElementById('un'+id).value,role:document.getElementById('ur'+id).value,active:document.getElementById('ua'+id).checked})});toast('人员信息已保存');loadSettings()}catch(err){toast(err.message)}}
+    async function addCatalog(e){e.preventDefault();try{await request('/catalog',{method:'POST',body:JSON.stringify({model:cModel.value,productType:cType.value,aliases:cAliases.value||cModel.value,colors:cColors.value,colorRequired:cRequired.checked})});e.target.reset();toast('商品规则已新增');loadSettings()}catch(err){toast(err.message)}}
+    [keyword,fStatus,fType,fPlatform].forEach(x=>x.addEventListener(x===keyword?'input':'change',()=>{clearTimeout(window.filterTimer);window.filterTimer=setTimeout(loadCases,200)}));
+    rawText.addEventListener('keydown',e=>{if(e.ctrlKey&&e.key==='Enter')createCase()});boot();
+  </script>
+</body>
+</html>
